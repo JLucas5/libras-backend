@@ -28,5 +28,5 @@ const storageTypes = {
 }
 
 module.exports = {
-    storage: storageTypes['local']
+    storage: storageTypes['s3']
 }
