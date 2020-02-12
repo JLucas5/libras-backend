@@ -6,7 +6,7 @@ module.exports = {
 
     async create(req, res){
         
-        const { originalname, location } = req.file || {location: "", originalname: ""}
+        const { originalname = "", location = "" } = req.file
         const { statement, question_type } = req.body
         const { module_id } = req.headers
         
@@ -37,5 +37,35 @@ module.exports = {
         }
 
         return res.status(400).json({ error: "Wrong question type, must be 'sub' or 'obj'." })
+    },
+
+    async update(req, res) {
+        const { originalname = "", location = ""} = req.file
+        const { text = "", correct_answer = false, expected_answer, activity_type } = req.body
+        const { activity_id } = req.headers
+
+        let activity = await ObjectiveActv.findById(activity_id)
+            activity = await SubjectiveActv.findById(activity_id)
+
+        if(!activity){
+            res.status(400).json({ error: "Activity does not exist" })
+        }
+
+        if(activity_type = "obj"){
+
+            let updated_actv = await ObjectiveActv.findOneAndUpdate({_id: activity_id},  { "$push": { "alternatives": { text = text.trim(), location, correct_answer }}}, {new: true})
+
+            return res.json(updated_actv)
+        }
+
+        if(activity_type = "obj"){
+
+            let updated_actv = await ObjectiveActv.findOneAndUpdate({_id: activity_id}, {expected_answer = expected_answer.trim()}, {new: true})
+
+            return res.json(updated_actv)
+        }
+
+        return res.status(400).json({ error: "Wrong activity type, must be 'sub' or 'obj'. " })
+
     }
 }
