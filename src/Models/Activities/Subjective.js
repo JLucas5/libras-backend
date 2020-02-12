@@ -1,9 +1,12 @@
-const Activity = require("../Activities/Activity")
+const mongoose = require('mongoose')
 
-const mongoose = require('mongoose'),
-      extend = require('mongoose-schema-extend')
-
-const SubjectiveSchema = Activity.extend({
+const SubjectiveSchema = new mongoose.Schema({
+    statement: String,
+    statement_image: String,
+    module: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Module"
+    },
     expected_answer: String
 })
 
