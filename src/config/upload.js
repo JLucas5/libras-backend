@@ -16,7 +16,7 @@ const storageTypes = {
     }),
     s3: multerS3({
         s3: new aws.S3(),
-        bucket: 'foodsup-images',
+        bucket: 'libras-storage',
         contentType: multerS3.AUTO_CONTENT_TYPE,
         acl: 'public-read',
         key: (req, file, cb) => {
