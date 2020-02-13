@@ -6,7 +6,7 @@ module.exports = {
 
     async create(req, res){
         
-        const { originalname, location } = req.file || { originalname: "", location: "" } 
+        const { originalname, location = '' } = req.file
         const { statement, question_type } = req.body
         const { module_id } = req.headers
         
@@ -67,5 +67,26 @@ module.exports = {
 
         return res.status(400).json({ error: "Wrong activity type, must be 'sub' or 'obj'. " })
 
+    },
+
+    async delete(req, res) {
+        const { activity_id } = req.headers
+
+        let activity = await ObjectiveActv.findById(activity_id)
+
+        if(activity){
+            ObjectiveActv.findByIdAndDelete(activity_id)
+            return res.json("Activity deleted!")            
+        }
+
+        activity = await SubjectiveActv.findById(activity_id)
+
+        if(activity){
+            SubjectiveActv.findByIdAndDelete(activity_id)
+            return res.json("Activity deleted!")
+        }
+
+        return res.status(400).json({ error: "Activity does not exist." })
     }
+
 }

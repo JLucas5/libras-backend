@@ -1,12 +1,9 @@
 const mongoose = require('mongoose')
+const Activity = require('../Activities/Activity')
 
-const ObjectiveSchema = new mongoose.Schema({
-    statement: String,
-    statement_image: String,
-    module: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Module"
-    },
+const ObjectiveSchema = Activity.discriminator('ObjectiveActivity',
+
+new mongoose.Schema({
 
     alternatives: [
         {
@@ -15,6 +12,6 @@ const ObjectiveSchema = new mongoose.Schema({
             correct_answer: Boolean
         }
     ]
-})
+}))
 
-module.exports = mongoose.model('Objective activity', ObjectiveSchema)
+module.exports = mongoose.model('ObjectiveActivity')

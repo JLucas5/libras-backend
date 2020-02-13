@@ -1,13 +1,10 @@
 const mongoose = require('mongoose')
+const Activity = require("../Activities/Activity")
 
-const SubjectiveSchema = new mongoose.Schema({
-    statement: String,
-    statement_image: String,
-    module: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Module"
-    },
+const SubjectiveSchema = Activity.discriminator('SubjectiveActivity', new mongoose.Schema({
+
     expected_answer: String
-})
 
-module.exports = mongoose.model('Subjective activity', SubjectiveSchema)
+}))
+
+module.exports = mongoose.model('SubjectiveActivity')
