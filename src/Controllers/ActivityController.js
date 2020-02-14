@@ -1,5 +1,7 @@
 const ObjectiveActv = require("../Models/Activities/Objective")
 const SubjectiveActv = require("../Models/Activities/Subjective")
+const Activity = require('../Models/Activities/Activity')
+
 const Module = require("../Models/Module")
 
 module.exports = {
@@ -41,49 +43,41 @@ module.exports = {
 
     async update(req, res) {
         const { originalname, location } = req.file || { originalname: "", location: ""}
-        const { text = "", correct_answer = false, expected_answer, activity_type } = req.body
-        const { activity_id } = req.headers
+        const { text = "", correct_answer = false, expected_answer} = req.body
+        const { activity_id } = req.params
 
-        let activity = await ObjectiveActv.findById(activity_id)
-            activity = await SubjectiveActv.findById(activity_id)
+        const activity = await Activity.findById(activity_id)
 
         if(!activity){
             res.status(400).json({ error: "Activity does not exist" })
         }
 
-        if(activity_type = "obj"){
+        if(activity.__t === "ObjectiveActivity"){
 
-            let updated_actv = await ObjectiveActv.findOneAndUpdate({_id: activity_id},  { "$push": { "alternatives": { text, location, correct_answer }}}, {new: true})
-
-            return res.json(updated_actv)
-        }
-
-        if(activity_type = "obj"){
-
-            let updated_actv = await ObjectiveActv.findOneAndUpdate({_id: activity_id}, {expected_answer}, {new: true})
+            const updated_actv = await Activity.findByIdAndUpdate(activity_id,  { "$push": { "alternatives": { text, location, correct_answer }}}, {new: true, strict: false})
 
             return res.json(updated_actv)
         }
 
-        return res.status(400).json({ error: "Wrong activity type, must be 'sub' or 'obj'. " })
+        if(activity.__t === "SubjectiveActivity"){
+
+            const updated_actv = await Activity.findByIdAndUpdate(activity_id, {expected_answer: expected_answer}, {new: true, strict:false})
+
+            return res.json(updated_actv)
+        }
+
+        return res.status(400).json({ error: "Wrong activity type " })
 
     },
 
     async delete(req, res) {
         const { activity_id } = req.headers
 
-        let activity = await ObjectiveActv.findById(activity_id)
+        let activity = await Activity.findById(activity_id)
 
         if(activity){
-            ObjectiveActv.findByIdAndDelete(activity_id)
+            Activity.findByIdAndDelete(activity_id)
             return res.json("Activity deleted!")            
-        }
-
-        activity = await SubjectiveActv.findById(activity_id)
-
-        if(activity){
-            SubjectiveActv.findByIdAndDelete(activity_id)
-            return res.json("Activity deleted!")
         }
 
         return res.status(400).json({ error: "Activity does not exist." })
