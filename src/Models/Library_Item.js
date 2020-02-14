@@ -2,12 +2,13 @@ const mongoose = require('mongoose')
 
 const ItemSchema = new mongoose.Schema({
     name: String,
-    location: String,
-    library: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Library"
+    location: String, 
+    type: {
+        type: String,
+        enum: [ 'video', 'image', 'book']
     }
-}, 
+    
+},
 
 {
     toJSON: {
