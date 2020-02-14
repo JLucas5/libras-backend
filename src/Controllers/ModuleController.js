@@ -1,5 +1,7 @@
 const Module = require("../Models/Module")
 const Activity = require('../Models/Activities/Activity')
+const ObjectiveActv = require("../Models/Activities/Objective")
+const SubjectiveActv = require("../Models/Activities/Subjective")
 
 module.exports = {
 
@@ -35,6 +37,21 @@ module.exports = {
 
         return res.json({warning: "Module and activities deleted"})
 
+    },
+
+    async show(req, res){
+
+        const { module_id } = req.params
+
+        const module = await Module.findById(module_id)
+
+        if(!module){
+            return res.status(400).json({error: "Module does not exist"})
+        }
+
+        const activityList = await Activity.find({module})
+
+        return res.json(activityList)
     }
 
     
