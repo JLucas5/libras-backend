@@ -8,7 +8,7 @@ module.exports = {
 
     async create(req, res){
         
-        const { originalname, location = '' } = req.file
+        const { originalname = '', location = '' } = req.file ||  {originalname: '', location: ''}
         const { statement, question_type } = req.body
         const { module_id } = req.headers
         
