@@ -54,14 +54,14 @@ module.exports = {
 
         if(activity.__t === "ObjectiveActivity"){
 
-            const updated_actv = await Activity.findByIdAndUpdate(activity_id,  { "$push": { "alternatives": { text, location, correct_answer }}}, {new: true, strict: false})
+            const updated_actv = await ObjectiveActv.findByIdAndUpdate(activity_id,  { "$push": { "alternatives": { text, location, correct_answer }}}, {new: true})
 
             return res.json(updated_actv)
         }
 
         if(activity.__t === "SubjectiveActivity"){
 
-            const updated_actv = await Activity.findByIdAndUpdate(activity_id, {expected_answer: expected_answer}, {new: true, strict:false})
+            const updated_actv = await SubjectiveActv.findByIdAndUpdate(activity_id, {expected_answer: expected_answer}, {new: true})
 
             return res.json(updated_actv)
         }
