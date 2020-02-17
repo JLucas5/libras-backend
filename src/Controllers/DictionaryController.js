@@ -1,12 +1,12 @@
-const LibraryItem = require('../Models/Library_Item')
+const Dictionary = require('../Models/Dictionary_Item')
 
 module.exports = {
     async store(req, res){
-        const { originalname, location } = req.file
+        const { originalname, location } = req.file || {originalname: '', location: null}
         const { word } = req.body
 
         const new_item = await Dictionary.create({
-            name,
+            word,
             location
         })
 
@@ -15,8 +15,18 @@ module.exports = {
 
     async show(req, res){
 
-        const itemList = Dictionary.find()
+        const itemList = await Dictionary.find()
+        console.log(itemList)
 
         return res.json(itemList)
+    },
+
+    async delete(req, res){
+
+        const { item_id } = req.params
+
+        Dictionary.findByIdAndDelete(item_id)
+
+        return res.json({status: "Item deleted"})
     }
 }

@@ -2,12 +2,12 @@ const LibraryItem = require('../Models/Library_Item')
 
 module.exports = {
     async store(req, res){
-        const { originalname, location } = req.file
-        const { name, type } = req.body
+        const { originalname, location } = req.file ||{originalname: '', location:null}
+        const { name, type, video_location } = req.body
 
         const new_item = await LibraryItem.create({
             name,
-            location,
+            location: video_location || location,
             type
         })
 
@@ -15,10 +15,8 @@ module.exports = {
     },
 
     async show(req, res){
-        
-        const { type } = req.params
 
-        const itemList = LibraryItem.find({type})
+        const itemList = LibraryItem.find()
 
         return res.json(itemList)
     },
