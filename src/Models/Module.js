@@ -4,7 +4,7 @@ const ModuleSchema = new mongoose.Schema({
     name: String,
     description: String,
     hidden: Boolean
-}, 
+},
 
 {
     toJSON: {

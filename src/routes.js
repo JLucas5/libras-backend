@@ -20,11 +20,11 @@ routes.post('/modules/new', ModuleController.store)
 routes.get('/modules', DashboardController.show)
 routes.delete('/modules/delete/:id', ModuleController.delete)
 
-routes.post('/library', LibraryController.show)
+routes.get('/library', LibraryController.show)
 routes.post('/library/new', upload.single('thumbnail'), LibraryController.store)
 
-routes.post('dictionary', DictionaryController.show)
-routes.post('dictionary/new', upload.single('thumbnail'), DictionaryController.store)
+routes.get('/dictionary', DictionaryController.show)
+routes.post('/dictionary/new', upload.single('thumbnail'), DictionaryController.store)
 
 
 module.exports = routes

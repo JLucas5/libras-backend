@@ -21,5 +21,14 @@ module.exports = {
         const itemList = LibraryItem.find({type})
 
         return res.json(itemList)
+    },
+
+    async delete(req, res){
+
+        const { item_id } = req.params
+
+        LibraryItem.findByIdAndDelete(item_id)
+
+        return res.json({status: "Item deleted"})
     }
 }
