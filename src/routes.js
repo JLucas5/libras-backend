@@ -11,12 +11,12 @@ const DictionaryController = require('./Controllers/DictionaryController')
 const routes = express.Router()
 const upload = multer(uploadConfig)
 
-routes.post('/activities', upload.single('thumbnail'), ActivityController.create)
+routes.post('/activities/new', upload.single('thumbnail'), ActivityController.create)
 routes.post('/activities/update/:activity_id', upload.single('thumbnail'), ActivityController.update)
 routes.delete('/activities/delete/:activity_id')
 routes.get('/modules/:module_id', ModuleController.show)
 
-routes.post('/modules/new', ModuleController.store)
+routes.post('/modules/new', upload.none(), ModuleController.store)
 routes.get('/modules', DashboardController.show)
 routes.delete('/modules/delete/:id', ModuleController.delete)
 
