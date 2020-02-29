@@ -64,7 +64,7 @@ module.exports = {
     },
 
     async delete(req, res) {
-        const { activity_id } = req.headers
+        const { activity_id } = req.params
 
         let activity = await Activity.findById(activity_id)
 
@@ -74,6 +74,18 @@ module.exports = {
         }
 
         return res.status(400).json({ error: "Activity does not exist." })
+    },
+
+    async all(req, res){
+
+        const { module_id } = req.params
+
+        const module_ = await Module.findById(module_id)
+
+        const activities = await Activity.find({module: module_})
+
+        return res.json(activities)
+        
     }
 
 }
