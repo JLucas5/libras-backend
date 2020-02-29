@@ -6,7 +6,10 @@ const SubjectiveActv = require("../Models/Activities/Subjective")
 module.exports = {
 
     async store(req, res){
-        const { name, description } = req.body
+
+        const { thumbnail, pdf } = req.files || { thumbnail: null, pdf: null }
+
+        const { name, description, video } = req.body
 
         const atvModule = await Module.findOne({ name })
 
@@ -16,24 +19,28 @@ module.exports = {
 
         const new_module = await Module.create({
             name,
-            description
+            description,
+            video: video ? video : '',
+            image: thumbnail ? thumbnail[0].location : '',
+            pdf: pdf ? pdf[0].location : ''
         })
         
         return res.json(new_module)
     },
 
     async delete(req, res){
-        const { module_id } = req.header
 
-        const module = await Module.findById(module_id)
+        const { module_id } = req.params
 
-        if(!module){
+        const moduleFound = await Module.findById(module_id)
+
+        if(!moduleFound){
             return res.status(400).json({error: "Module does not exist!"})
         }
 
-        Activity.deleteMany({module})
+        await Activity.deleteMany({module: moduleFound})
 
-        Module.findByIdAndDelete(module_id)
+        await Module.findByIdAndDelete(module_id)
 
         return res.json({warning: "Module and activities deleted"})
 
@@ -43,15 +50,31 @@ module.exports = {
 
         const { module_id } = req.params
 
-        const module = await Module.findById(module_id)
+        const moduleFound = await Module.findById(module_id)
 
-        if(!module){
-            return res.status(400).json({error: "Module does not exist"})
-        }
+        return res.json(moduleFound)
+    },
 
-        const activityList = await Activity.find({module})
+    async edit(req, res){
+        const { module_id } = req.params
 
-        return res.json(activityList)
+        const { thumbnail, pdf } = req.files || { thumbnail: null, pdf: null}
+        const { name, description, video, old_pdf, old_image } = req.body
+
+        
+            console.log(module_id)
+        
+        const response = await Module.findByIdAndUpdate( module_id, {
+            name,
+            description,
+            video,
+            image: thumbnail ? thumbnail[0].location : old_image,
+            pdf: pdf ? pdf[0].location : old_pdf
+
+        })
+        console.log(response)
+
+        return res.json(response)
     }
 
     
