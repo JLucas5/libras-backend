@@ -13,6 +13,7 @@ mongoose.connect('mongodb+srv://libras:k1k0b1du@cluster0-f1kph.mongodb.net/test?
     useUnifiedTopology: true 
 })
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 
 app.use(cors())
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')))
