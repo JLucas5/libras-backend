@@ -4,8 +4,8 @@ const ItemSchema = new mongoose.Schema({
     name: String,
     location: String, 
     type: {
-        type: String,
-        enum: [ 'video', 'image', 'book']
+        type: String, 
+        enum: [ 'video', 'music', 'book']
     }
     
 },
