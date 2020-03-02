@@ -1,7 +1,5 @@
 const Module = require("../Models/Module")
-const Activity = require('../Models/Activities/Activity')
-const ObjectiveActv = require("../Models/Activities/Objective")
-const SubjectiveActv = require("../Models/Activities/Subjective")
+const Activity = require('../Models/Activity')
 
 module.exports = {
 
