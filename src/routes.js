@@ -30,7 +30,7 @@ routes.get('/modules/:module_id', ModuleController.show)
 
 routes.post('/library/new', upload.single('file'), LibraryController.store)
 routes.delete('/library/delete/:id', LibraryController.delete)
-routes.post('/library/view/:type', upload.none(), LibraryController.show)
+routes.get('/library/view/:type', upload.none(), LibraryController.show)
 routes.post('/library/edit/:id', upload.single('file'), LibraryController.edit)
 routes.get('/library/:id', LibraryController.find)
 

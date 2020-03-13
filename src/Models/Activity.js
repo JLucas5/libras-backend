@@ -4,7 +4,10 @@ const ActivitySchema = new mongoose.Schema({
     statement: String,
     statement_image: String,
     video: String,
-    type: String,
+    type: {
+        type: String, 
+        enum: [ 'obj', 'sub']
+    },
     module: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Module"
