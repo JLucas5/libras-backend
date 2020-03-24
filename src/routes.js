@@ -13,7 +13,7 @@ const upload = multer(uploadConfig)
 
 routes.post('/activities/new', upload.none(), ActivityController.create)
 routes.get('/activities/all/:module_id', ActivityController.all)
-routes.post('/activities/update/:activity_id', upload.single('thumbnail'), ActivityController.update)
+routes.post('/activities/update/:activity_id', upload.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'pdf', maxCount: 1 }]), ActivityController.update)
 routes.delete('/activities/delete/:activity_id', ActivityController.delete)
 routes.get('/activities/:activity_id', ActivityController.find)
 

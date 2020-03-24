@@ -7,11 +7,12 @@ module.exports = {
     
     async store(req, res){
         const { originalname, location } = req.file || {originalname: '', location: null}
-        const { word } = req.body
+        const { word, video } = req.body
 
             const new_item = await Dictionary.create({
                 word,
-                location
+                location,
+                video
             })
         return res.json(new_item)
     },
@@ -35,12 +36,13 @@ module.exports = {
     async edit(req, res){
 
         const { originalname, location } = req.file || {originalname: '', location: null}
-        const { word, old_image } = req.body
+        const { word, old_image, video } = req.body
         const { id } = req.params
 
         const updated_item = await Dictionary.findByIdAndUpdate(id, {
             word,
-            location: location ? location : old_image
+            location: location ? location : old_image,
+            video
         })
 
         return res.json(updated_item)

@@ -59,7 +59,7 @@ module.exports = {
 
     async update(req, res) {
 
-        const { originalname, location } = req.file || { originalname: "", location: undefined}
+        const { thumbnail, pdf } = req.files || { thumbnail: null, pdf: null}
         const { video, statement, expected_answer } = req.body
         const { activity_id } = req.params
 
@@ -68,15 +68,15 @@ module.exports = {
         if(!activity){
             res.status(400).json({ error: "Activity does not exist" })
         }
-        
-        console.log(video,statement,location,activity)
+
         const updated_actv = await Activity.findByIdAndUpdate(activity_id, {
             video,
             statement,
-            "statement_image": location ? location : activity.statement_image,
+            "statement_image": thumbnail ? thumbnail[0].location : activity.statement_image,
+            pdf: pdf ? pdf[0].location : activity.pdf,
             expected_answer
         })
-
+        
         return res.json(updated_actv)
 
     },

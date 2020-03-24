@@ -4,6 +4,7 @@ const ActivitySchema = new mongoose.Schema({
     statement: String,
     statement_image: String,
     video: String,
+    file: String,
     type: {
         type: String, 
         enum: [ 'obj', 'sub']
