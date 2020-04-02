@@ -20,6 +20,11 @@ module.exports = {
     async show(req, res){
 
         const itemList = await Dictionary.find()
+       
+        itemList.sort((a,b) => {
+            return a.word.localeCompare(b.word)
+        });
+
 
         return res.json(itemList)
     },

@@ -20,6 +20,10 @@ module.exports = {
 
         const itemList = await LibraryItem.find({ "type": type })
 
+        itemList.sort((a,b) => {
+            return a.name.localeCompare(b.name)
+        })
+
         return res.json(itemList)
         
     },    

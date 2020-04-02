@@ -14,4 +14,4 @@ const ModuleSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Module', ModuleSchema)
+module.exports = mongoose.model('Module', ModuleSchema) 
