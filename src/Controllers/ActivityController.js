@@ -12,12 +12,18 @@ module.exports = {
 			return res.status(400).json({ error: 'Module does not exist' })
 		}
 
-		const activity = await Activity.create({ module: module_, type: question_type })
+		const activity = await Activity.create({
+			module: module_,
+			type: question_type,
+		})
 		return res.json(activity)
 	},
 
 	async addAlternative(req, res) {
-		const { originalname, location } = req.file || { originalname: '', location: '' }
+		const { originalname, location } = req.file || {
+			originalname: '',
+			location: '',
+		}
 		const { text = '', video = '', correct_answer = false } = req.body
 		const { activity_id } = req.params
 
@@ -27,7 +33,13 @@ module.exports = {
 			res.status(400).json({ error: 'Activity does not exist' })
 		}
 
-		const new_activity = await Alternative.create({ location, text, video, correct_answer, activity })
+		const new_activity = await Alternative.create({
+			location,
+			text,
+			video,
+			correct_answer,
+			activity,
+		})
 
 		return res.json(new_activity)
 	},
@@ -51,7 +63,10 @@ module.exports = {
 	},
 
 	async updateAlternative(req, res) {
-		const { originalname, location } = req.file || { originalname: '', location: null }
+		const { originalname, location } = req.file || {
+			originalname: '',
+			location: null,
+		}
 		const { correct_answer, text, video } = req.body
 
 		const { alternative_id } = req.params
@@ -62,12 +77,14 @@ module.exports = {
 			res.status(400).json({ error: 'Alternative does not exist' })
 		}
 
-		await Alternative.findByIdAndUpdate(alternative_id, {
+		const response = await Alternative.findByIdAndUpdate(alternative_id, {
 			location,
 			text,
 			video,
 			correct_answer,
 		})
+
+		return res.json(response)
 	},
 
 	async update(req, res) {
@@ -84,7 +101,9 @@ module.exports = {
 		const updated_actv = await Activity.findByIdAndUpdate(activity_id, {
 			video,
 			statement,
-			statement_image: thumbnail ? thumbnail[0].location : activity.statement_image,
+			statement_image: thumbnail
+				? thumbnail[0].location
+				: activity.statement_image,
 			pdf: pdf ? pdf[0].location : activity.pdf,
 			expected_answer,
 		})
