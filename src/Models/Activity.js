@@ -1,22 +1,20 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 const ActivitySchema = new mongoose.Schema({
-    statement: String,
-    statement_image: String,
-    video: String,
-    file: String,
-    type: {
-        type: String, 
-        enum: [ 'obj', 'sub']
-    },
-    module: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Module"
-    },
+	statement: String,
+	statement_image: String,
+	video: String,
+	file: String,
+	type: {
+		type: String,
+		enum: ["obj", "sub"],
+	},
+	module: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Module",
+	},
 
-    expected_answer: String
+	expected_answer: String,
 })
 
-
-
-module.exports = mongoose.model('Activity', ActivitySchema)
+module.exports = mongoose.model("Activity", ActivitySchema)

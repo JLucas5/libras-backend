@@ -1,122 +1,128 @@
 const Activity = require('../Models/Activity')
 const Alternative = require('../Models/Alternative')
 
-const Module = require("../Models/Module")
+const Module = require('../Models/Module')
 
 module.exports = {
+	async create(req, res) {
+		const { question_type, module_id } = req.body
 
-    async create(req, res){
-        
-        const { question_type, module_id } = req.body
+		const module_ = await Module.findById(module_id)
+		if (!module_) {
+			return res.status(400).json({ error: 'Module does not exist' })
+		}
 
-        const module_ = await Module.findById(module_id)
-        if (!module_) {
-            return res.status(400).json({ error: "Module does not exist" })
-        }
-        
-        const activity = await Activity.create({ module: module_, type: question_type })
-        return res.json(activity)
-    },
+		const activity = await Activity.create({ module: module_, type: question_type })
+		return res.json(activity)
+	},
 
-    async addAlternative(req, res) {
+	async addAlternative(req, res) {
+		const { originalname, location } = req.file || { originalname: '', location: '' }
+		const { text = '', video = '', correct_answer = false } = req.body
+		const { activity_id } = req.params
 
-        const { originalname, location } = req.file || { originalname: "", location: ""}
-        const { text = "", correct_answer = false} = req.body
-        const { activity_id } = req.params
+		const activity = await Activity.findById(activity_id)
 
-        const activity = await Activity.findById(activity_id)
+		if (!activity) {
+			res.status(400).json({ error: 'Activity does not exist' })
+		}
 
-        if(!activity){
-            res.status(400).json({ error: "Activity does not exist" })
-        }
+		const new_activity = await Alternative.create({ location, text, video, correct_answer, activity })
 
-        const new_activity = await Alternative.create({location, text, correct_answer, activity})
+		return res.json(new_activity)
+	},
 
-        return res.json(new_activity)
+	async findAlternatives(req, res) {
+		const { activity_id } = req.params
 
-    },
+		const activity = await Activity.findById(activity_id)
 
-    async findAlternatives(req, res){
+		const alternatives = await Alternative.find({ activity })
 
-        const {activity_id} = req.params
+		return res.json(alternatives)
+	},
 
-        const activity = await Activity.findById(activity_id)
+	async deleteAlternative(req, res) {
+		const { alternative_id } = req.params
 
-        const alternatives = await Alternative.find({activity})
+		await Alternative.findByIdAndDelete(alternative_id)
 
-        return res.json(alternatives)
-    },
+		return res.json({ warning: 'Alternative deleted' })
+	},
 
-    async deleteAlternative(req, res){
-        
-        const { alternative_id } = req.params
+	async updateAlternative(req, res) {
+		const { originalname, location } = req.file || { originalname: '', location: null }
+		const { correct_answer, text, video } = req.body
 
-        await Alternative.findByIdAndDelete(alternative_id)
+		const { alternative_id } = req.params
 
-        return res.json({"warning": "Alternative deleted"})
+		const alternative = await Alternative.findById(alternative_id)
 
-    },
+		if (!alternative) {
+			res.status(400).json({ error: 'Alternative does not exist' })
+		}
 
-    async update(req, res) {
+		await Alternative.findByIdAndUpdate(alternative_id, {
+			location,
+			text,
+			video,
+			correct_answer,
+		})
+	},
 
-        const { thumbnail, pdf } = req.files || { thumbnail: null, pdf: null}
-        const { video, statement, expected_answer } = req.body
-        const { activity_id } = req.params
+	async update(req, res) {
+		const { thumbnail, pdf } = req.files || { thumbnail: null, pdf: null }
+		const { video, statement, expected_answer } = req.body
+		const { activity_id } = req.params
 
-        const activity = await Activity.findById(activity_id)
+		const activity = await Activity.findById(activity_id)
 
-        if(!activity){
-            res.status(400).json({ error: "Activity does not exist" })
-        }
+		if (!activity) {
+			res.status(400).json({ error: 'Activity does not exist' })
+		}
 
-        const updated_actv = await Activity.findByIdAndUpdate(activity_id, {
-            video,
-            statement,
-            "statement_image": thumbnail ? thumbnail[0].location : activity.statement_image,
-            pdf: pdf ? pdf[0].location : activity.pdf,
-            expected_answer
-        })
-        
-        return res.json(updated_actv)
+		const updated_actv = await Activity.findByIdAndUpdate(activity_id, {
+			video,
+			statement,
+			statement_image: thumbnail ? thumbnail[0].location : activity.statement_image,
+			pdf: pdf ? pdf[0].location : activity.pdf,
+			expected_answer,
+		})
 
-    },
+		return res.json(updated_actv)
+	},
 
-    async delete(req, res) {
-        const { activity_id } = req.params
+	async delete(req, res) {
+		const { activity_id } = req.params
 
-        let activity = await Activity.findById(activity_id)
+		let activity = await Activity.findById(activity_id)
 
-        if(activity){
+		if (activity) {
+			await Alternative.deleteMany({ activity })
 
-            await Alternative.deleteMany({activity})
+			await Activity.findByIdAndDelete(activity_id)
 
-            await Activity.findByIdAndDelete(activity_id)
+			return res.json('Activity deleted!')
+		}
 
-            return res.json("Activity deleted!")            
-        }
+		return res.status(400).json({ error: 'Activity does not exist.' })
+	},
 
-        return res.status(400).json({ error: "Activity does not exist." })
-    },
+	async all(req, res) {
+		const { module_id } = req.params
 
-    async all(req, res){
+		const module_ = await Module.findById(module_id)
 
-        const { module_id } = req.params
+		const activities = await Activity.find({ module: module_ })
 
-        const module_ = await Module.findById(module_id)
+		return res.json(activities)
+	},
 
-        const activities = await Activity.find({module: module_})
+	async find(req, res) {
+		const { activity_id } = req.params
 
-        return res.json(activities)
-        
-    },
+		const activity = await Activity.findById(activity_id)
 
-    async find(req, res){
-
-        const { activity_id } = req.params
-
-        const activity = await Activity.findById(activity_id)
-
-        return res.json(activity)
-    }
-
+		return res.json(activity)
+	},
 }

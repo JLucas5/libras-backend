@@ -20,6 +20,7 @@ routes.get('/activities/:activity_id', ActivityController.find)
 routes.post('/alternative/add/:activity_id', upload.single('thumbnail'), ActivityController.addAlternative)
 routes.get('/alternative/find/:activity_id', ActivityController.findAlternatives)
 routes.delete('/alternative/delete/:alternative_id', ActivityController.deleteAlternative)
+routes.post('/alternative/edit/:alternative_id', upload.single('thumbnail'),ActivityController.updateAlternative)
 
 routes.get('/modules', DashboardController.show)
 routes.post('/modules/new', upload.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'pdf', maxCount: 1 }]), ModuleController.store)
