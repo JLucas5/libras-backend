@@ -24,7 +24,7 @@ module.exports = {
 			originalname: '',
 			location: '',
 		}
-		const { text = '', video = '', correct_answer = false } = req.body
+		const { text = '', video = '' } = req.body
 		const { activity_id } = req.params
 
 		const activity = await Activity.findById(activity_id)
@@ -37,7 +37,6 @@ module.exports = {
 			location,
 			text,
 			video,
-			correct_answer,
 			activity,
 		})
 
@@ -67,7 +66,7 @@ module.exports = {
 			originalname: '',
 			location: null,
 		}
-		const { correct_answer, text, video } = req.body
+		const { text, video } = req.body
 
 		const { alternative_id } = req.params
 
@@ -81,7 +80,6 @@ module.exports = {
 			location,
 			text,
 			video,
-			correct_answer,
 		})
 
 		return res.json(response)
