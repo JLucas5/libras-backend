@@ -1,6 +1,5 @@
 const Activity = require('../Models/Activity')
 const Alternative = require('../Models/Alternative')
-
 const Module = require('../Models/Module')
 
 module.exports = {

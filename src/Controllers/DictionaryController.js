@@ -1,64 +1,66 @@
 const Dictionary = require('../Models/Dictionary_Item')
 
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId
 
 module.exports = {
-    
-    async store(req, res){
-        const { originalname, location } = req.file || {originalname: '', location: null}
-        const { word, video } = req.body
+	async store(req, res) {
+		const { originalname, location } = req.file || {
+			originalname: '',
+			location: null,
+		}
+		const { word, video, meaning } = req.body
 
-            const new_item = await Dictionary.create({
-                word,
-                location,
-                video
-            })
-        return res.json(new_item)
-    },
+		const new_item = await Dictionary.create({
+			word,
+			location,
+			video,
+			meaning,
+		}).then()
+		return res.json(new_item)
+	},
 
-    async show(req, res){
+	async show(req, res) {
+		const itemList = await Dictionary.find()
 
-        const itemList = await Dictionary.find()
-       
-        itemList.sort((a,b) => {
-            return a.word.localeCompare(b.word)
-        });
+		itemList.sort((a, b) => {
+			return a.word.localeCompare(b.word)
+		})
 
+		return res.json(itemList)
+	},
 
-        return res.json(itemList)
-    },
+	async delete(req, res) {
+		const { id } = req.params
 
-    async delete(req, res){
+		await Dictionary.findByIdAndDelete(id)
 
-        const { id } = req.params
+		return res.json({ status: 'Item deleted' })
+	},
 
-        await Dictionary.findByIdAndDelete(id)
+	async edit(req, res) {
+		const { originalname, location } = req.file || {
+			originalname: '',
+			location: null,
+		}
+		const { word, old_image, video, meaning } = req.body
+		const { id } = req.params
 
-        return res.json({status: "Item deleted"})
-    },
+		const updated_item = await Dictionary.findByIdAndUpdate(id, {
+			word,
+			location: location ? location : old_image,
+			video,
+			meaning,
+		})
 
-    async edit(req, res){
+		return res.json(updated_item)
+	},
 
-        const { originalname, location } = req.file || {originalname: '', location: null}
-        const { word, old_image, video } = req.body
-        const { id } = req.params
+	async find(req, res) {
+		const { id } = req.params
 
-        const updated_item = await Dictionary.findByIdAndUpdate(id, {
-            word,
-            location: location ? location : old_image,
-            video
-        })
+		const item = await Dictionary.findById(id)
 
-        return res.json(updated_item)
-    },
-
-    async find(req, res){
-
-        const { id } = req.params
-
-        const item = await Dictionary.findById(id)
-
-        return res.json(item)
-    }
+		return res.json(item)
+	},
 }
