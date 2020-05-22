@@ -27,4 +27,4 @@ app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')))
 app.use(express.json())
 app.use(routes)
 
-app.listen(process.env.PORT || 3333)
+app.listen(process.env.PORT || 3000)
