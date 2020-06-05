@@ -2,7 +2,7 @@ const AboutUs = require('../Models/About_Us')
 
 module.exports = {
 	async createAboutUs(req, res) {
-		const { text, link, title } = req.body
+		const { text, link, title, priority } = req.body
 
 		const { id } = req.params
 
@@ -10,13 +10,14 @@ module.exports = {
 			text: text,
 			link: link,
 			title: title,
+			priority: priority,
 		})
 
 		return res.status(200).json({ res: 'Sobre nós criado' })
 	},
 
 	async updateAboutUs(req, res) {
-		const { text, link, title } = req.body
+		const { text, link, title, priority } = req.body
 
 		const { id } = req.params
 
@@ -24,6 +25,7 @@ module.exports = {
 			text: text,
 			link: link,
 			title: title,
+			priority: priority,
 		})
 
 		return res.status(200).json({ res: 'Sobre nós atualizado' })
