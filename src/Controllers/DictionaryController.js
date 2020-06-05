@@ -16,7 +16,7 @@ module.exports = {
 			location,
 			video,
 			meaning,
-		}).then()
+		})
 		return res.json(new_item)
 	},
 

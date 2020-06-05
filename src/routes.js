@@ -87,7 +87,14 @@ routes.post(
 routes.delete('/dictionary/delete/:id', DictionaryController.delete)
 
 routes.get('/aboutus/', AboutUsController.getAboutUs)
+routes.post('/aboutus/create/', upload.none(), AboutUsController.createAboutUs)
 routes.post('/aboutus/edit/:id', upload.none(), AboutUsController.updateAboutUs)
+routes.get('/aboutus/find/:id', upload.none(), AboutUsController.findAboutUs)
+routes.delete(
+	'/aboutus/delete/:id',
+	upload.none(),
+	AboutUsController.deleteAboutUs
+)
 
 routes.post('/users', UserController.create)
 
