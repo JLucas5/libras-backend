@@ -10,7 +10,7 @@ const app = express()
 
 mongoose
 	.connect(
-		'mongodb://libras:k1k0b1du@cluster0-shard-00-00-f1kph.mongodb.net:27017,cluster0-shard-00-01-f1kph.mongodb.net:27017,cluster0-shard-00-02-f1kph.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority',
+		'mongodb://admin:edulibras@edulibras-shard-00-00-v9uw7.mongodb.net:27017,edulibras-shard-00-01-v9uw7.mongodb.net:27017,edulibras-shard-00-02-v9uw7.mongodb.net:27017/test?ssl=true&replicaSet=edulibras-shard-0&authSource=admin&retryWrites=true&w=majority',
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
@@ -27,4 +27,4 @@ app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')))
 app.use(express.json())
 app.use(routes)
 
-app.listen(process.env.PORT || 3333)
+app.listen(process.env.PORT || 3000)
