@@ -1,63 +1,67 @@
-const LibraryItem = require('../Models/Library_Item')
+const LibraryItem = require("../Models/Library_Item")
 
 module.exports = {
-    async store(req, res){
-        const { originalname, location } = req.file ||{originalname: '', location:null}
-        const { name, type, file_location } = req.body
+	async store(req, res) {
+		const { originalname, location } = req.file || {
+			originalname: "",
+			location: null,
+		}
+		const { name, type, file_location, source } = req.body
 
-        const new_item = await LibraryItem.create({
-            name,
-            location: file_location || location,
-            type
-        })
+		console.log(name, source)
+		const new_item = await LibraryItem.create({
+			name,
+			location: file_location || location,
+			type,
+			source,
+		})
 
-        return res.json(new_item)
-    },
+		return res.json(new_item)
+	},
 
-    async show(req, res){
+	async show(req, res) {
+		const { type } = req.params
 
-        const { type } = req.params
+		const itemList = await LibraryItem.find({ type: type })
 
-        const itemList = await LibraryItem.find({ "type": type })
+		itemList.sort((a, b) => {
+			return a.name.localeCompare(b.name)
+		})
 
-        itemList.sort((a,b) => {
-            return a.name.localeCompare(b.name)
-        })
+		return res.json(itemList)
+	},
 
-        return res.json(itemList)
-        
-    },    
+	async find(req, res) {
+		const { id } = req.params
 
-        async find(req, res){
+		const item = await LibraryItem.findById(id)
 
-        const { id } = req.params
+		return res.json(item)
+	},
 
-        const item = await LibraryItem.findById(id)
+	async edit(req, res) {
+		const { originalname, location } = req.file || {
+			originalname: "",
+			location: null,
+		}
+		const { name, link, source } = req.body
+		const { id } = req.params
 
-        return res.json(item)
-        
-    },
-    
-    async edit(req, res){
+		console.log("oi")
+		const updated_item = await LibraryItem.findByIdAndUpdate(id, {
+			name,
+			source,
+			location: location ? location : link,
+		})
 
-        const { originalname, location } = req.file || {originalname: '', location: null}
-        const { name, link } = req.body
-        const { id } = req.params
+		return res.json(updated_item)
+	},
 
-        const updated_item = await LibraryItem.findByIdAndUpdate(id, {
-            name,
-            location: location ? location : link
-        })
+	async delete(req, res) {
+		const { id } = req.params
 
-        return res.json(updated_item)
-    },
+		await LibraryItem.findByIdAndDelete(id)
 
-    async delete(req, res){
-
-        const { id } = req.params
-
-        await LibraryItem.findByIdAndDelete(id)
-
-        return res.json({status: "Item deleted"})
-    }
+		return res.json({ status: "Item deleted" })
+	},
 }
