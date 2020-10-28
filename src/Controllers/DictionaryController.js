@@ -9,13 +9,14 @@ module.exports = {
 			originalname: '',
 			location: null,
 		}
-		const { word, video, meaning } = req.body
-
+		// const { word, video, meaning } = req.body
+		const { word, video, meaning, category } = req.body
 		const new_item = await Dictionary.create({
 			word,
 			location,
 			video,
 			meaning,
+			category
 		})
 		return res.json(new_item)
 	},
@@ -43,7 +44,7 @@ module.exports = {
 			originalname: '',
 			location: null,
 		}
-		const { word, old_image, video, meaning } = req.body
+		const { word, old_image, video, meaning, category } = req.body
 		const { id } = req.params
 
 		const updated_item = await Dictionary.findByIdAndUpdate(id, {
@@ -51,6 +52,7 @@ module.exports = {
 			location: location ? location : old_image,
 			video,
 			meaning,
+			category
 		})
 
 		return res.json(updated_item)

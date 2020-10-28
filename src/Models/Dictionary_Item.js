@@ -5,6 +5,7 @@ const DictionarySchema = new mongoose.Schema({
 	meaning: String,
 	location: String,
 	video: String,
+	category: String
 })
 
 module.exports = mongoose.model('Dictionary', DictionarySchema)
